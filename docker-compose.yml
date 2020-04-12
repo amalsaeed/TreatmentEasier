@@ -1,0 +1,56 @@
+version: '2'
+
+services:
+  php:
+    image: jguyomard/laravel-php:7.3
+    volumes:
+      - .:/var/www/
+    environment:
+      - "DB_HOST=mysql"
+      - "MYSQL_DATABASE=${DB_NAME}"
+      - "MYSQL_USER=${DB_USER}"
+      - "MYSQL_PASSWORD=${DB_PASS}"
+    ports:
+      - 80:80
+    networks:
+      - t_net
+
+  node:
+    image: node
+    volumes:
+      - .:/var/www/
+    networks:
+      - t_net
+
+  nginx:
+    image: jguyomard/laravel-nginx:1.13
+    volumes_from:
+      - php
+    ports:
+      - 8090:80
+    networks:
+      - t_net
+
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - data:/var/lib/mysql
+    environment:
+      - "MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}"
+      - "MYSQL_DATABASE=${DB_NAME}"
+      - "MYSQL_USER=${DB_USER}"
+      - "MYSQL_PASSWORD=${DB_PASS}"
+    networks:
+      - t_net
+
+networks:
+  t_net:
+    driver: "bridge"
+
+volumes:
+  data:
+    driver: "local"
+  redisdata:
+    driver: "local"
+  esdata01:
+    driver: "local"
