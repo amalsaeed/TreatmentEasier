@@ -407,6 +407,11 @@
             </div>
         </div>  		</div>
     <div class="col-md-10 content" style="margin-top: 20px">
+        @if (\Session::has('message'))
+            <div class="alert alert-success" style="font-size: 14px">
+                {!! \Session::get('message') !!}
+            </div>
+        @endif
         <div class="panel panel-default">
             <div class="panel-heading">
                 Doctors List
@@ -418,6 +423,13 @@
                             <p style="display: inline-block">
                                 {{$doctor->name}}
                             </p>
+                            <span class="pull-right" style="display: inline-block;">
+                                <form style="display: inline-block;" role="form" method="POST" action="{{route('admin.doctors.destroy')}}" autocomplete="off">
+                                    {{ csrf_field() }}
+                                    <input hidden name="id" value="{{$doctor->id}}">
+                                    <button type="submit" class="text-danger" style="display: inline-block;">Delete</button>
+                                </form>
+                            </span>
                         </li>
                     @endforeach
                 </ul>

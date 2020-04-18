@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Admin;
 use App\Model\Clinic;
 use App\Model\Doctor;
 use App\Model\User;
+use http\Client;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -32,7 +34,8 @@ class AdminController extends Controller
             'name'          => 'required',
             'mobile'        => 'required',
             'clinic'        => 'required',
-            'id_number'     => 'required|digits:10'
+            'id_number'     => 'required|digits:10',
+            'email'         => 'required|unique:users'
         ]);
 
         if($validator->fails()) {
@@ -54,9 +57,14 @@ class AdminController extends Controller
             ]
         );
 
-        return redirect()->back()->with('success', 'Doctor has been updated successfully');
+        return redirect()->back()->with('success', 'Doctor has been created successfully');
     }
 
+    public function destroyDoctor(Request $request) {
+        Doctor::findOrFail(request('id'))->delete();
+
+        return redirect()->back()->with('message', 'The doctor has been deleted successfully');
+    }
 
     public function storeClinic(Request $request) {
         $validator = \Validator::make($request->all(), [
@@ -70,5 +78,11 @@ class AdminController extends Controller
         Clinic::create(['name' => request('name')]);
 
         return redirect()->back()->with('success', 'Clinic has been added successfully');
+    }
+
+    public function destroyClinic(Request $request) {
+        Clinic::findOrFail(request('id'))->delete();
+
+        return redirect()->back()->with('message', 'The clinic has been deleted successfully');
     }
 }

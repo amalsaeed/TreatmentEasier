@@ -60,8 +60,10 @@ Route::group(['middleware' => ['auth:admin']], function () {
     Route::get('/admin', 'AdminController@index')->name('admin');
     Route::get('/admin/doctors', 'AdminController@doctors')->name('admin.doctors');
     Route::post('/admin/doctors', 'AdminController@storeDoctor')->name('admin.doctors.store');
+    Route::post('/admin/doctors/destroy', 'AdminController@destroyDoctor')->name('admin.doctors.destroy');
     Route::get('/admin/clinics', 'AdminController@clinics')->name('admin.clinics');
     Route::post('/admin/clinics', 'AdminController@storeClinic')->name('admin.clinics.store');
+    Route::post('/admin/clinics/destroy', 'AdminController@destroyClinic')->name('admin.clinics.destroy');
 });
 
 // Route::group(['middleware' => ['auth:doctor']], function () {
